@@ -1,22 +1,8 @@
 const {user} = require('../models');
-const { jwt, hash } = require('../utils');
-const nodemailer = require('nodemailer');
+const { jwt, hash, mail } = require('../utils');
 const fs = require('fs');
 const dotenv = require('dotenv');
 dotenv.config();
-const {EMAIL_ID, EMAIL_PASSWORD} = process.env;
-
-const smtpTransport = nodemailer.createTransport({
-  service : 'Gmail',
-  auth : {
-      user : EMAIL_ID,
-      pass : EMAIL_PASSWORD,
-  },
-  tls : {
-      rejectUnauthorized : false
-  }
-});
-
 
 module.exports = {
 
@@ -71,18 +57,9 @@ module.exports = {
   EmailAuth : async (req, res) => {
 		try {
 			let { email } = req.body;
-			let authCode = Math.random().toString().substr(2,6);
-			const mailOptions = {
-        from: EMAIL_ID,
-        to: email,
-        subject: 'QuickNotice 인증메일 입니다.',
-        text: `인증 번호 ${authCode} 를 입력해주세요.`,
-      };
-    await smtpTransport.sendMail(mailOptions, (err, res) => {
-        if (err) console.log(`mail${err}`);
-        smtpTransport.close();
-        return res.status(200).json({error : '잘못된 코드입니다.'});
-    });
+      let authCode = Math.random().toString().substr(2,6);
+      const mailing = mail.CheckMail(email, authCode)
+      console.log(mailing)
     return res.status(200).json({result : authCode});
 		} catch (error) {
       return res.status(200).send('에러가 났습니다.')

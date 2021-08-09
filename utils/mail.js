@@ -34,5 +34,23 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
+  },
+
+  CheckMail : async ( email, authCode ) => {
+    try {
+			const mailOptions = {
+        from: EMAIL_ID,
+        to: email,
+        subject: 'QuickNotice 인증메일 입니다.',
+        text: `인증 번호 ${authCode} 를 입력해주세요.`,
+      };
+      smtpTransport.sendMail(mailOptions, (err, res) => {
+        if (err) console.log(`mail${err}`);
+        smtpTransport.close();
+        return res.status(200).json({error : '잘못된 코드입니다.'});
+    });
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
