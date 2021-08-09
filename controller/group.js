@@ -55,7 +55,6 @@ module.exports = {
       console.log(err);
     }
   },
-
     
   GroupList : async (req, res) => {
     try{

@@ -1,6 +1,5 @@
 const multer = require('multer');
 
-
 const storage = multer.diskStorage({
   destination : (req,file, cb) => {
     cb(null, './uploads');
@@ -12,7 +11,7 @@ const storage = multer.diskStorage({
 });
 
 //form data 이름 약속 후 변경
-const single_uploader = multer({storage : storage}).single('img');
+const single_uploader = multer({storage : storage}).single('image');
 
 const multi_uploader = multer({storage : storage}).fields([
   //이부분은 프로젝트 혹은 api마다 따로 커스터마이징해서 만들어야함
